@@ -1,0 +1,9 @@
+# Node modülleri (Kesinlikle GitHub'a gitmemeli!)
+node_modules/
+
+# Yerel veritabanı ve geçici veriler
+rag.db
+*.log
+
+# Sistem dosyaları
+.DS_Store

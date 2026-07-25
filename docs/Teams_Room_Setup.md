@@ -1,0 +1,22 @@
+# Microsoft Teams Rooms (Toplantı Odası) Kurulumu ve Gelişmiş Donanım Rehberi
+
+## 1. Giriş, Donanım Uyumluluğu ve Kurumsal Oda Politikaları
+Microsoft Teams Rooms (MTR) sistemleri, modern kurumsal çalışma alanlarındaki fiziksel toplantı odalarını akıllı ve hibrit dijital işbirliği merkezlerine dönüştürmek amacıyla tasarlanmış bütünleşik bir platformdur. Sorunsuz bir hibrit toplantı deneyimi, yüksek ses/görüntü kalitesi ve veri güvenliği için donanım ile yazılım bileşenlerinin kurumsal standartlara uygun olarak yapılandırılması kritik bir öneme sahiptir. Şirket BT altyapı politikaları gereğince, toplantı odalarında kullanılacak kamera, ses barı, mikrofon ve dokunmatik kontrol paneli (Consoles) gibi çevre birimlerinin mutlaka "Microsoft Teams Certified" (Microsoft Teams Sertifikalı) donanım listesinde yer alması zorunludur. Sertifikasız donanımlar yerel Teams Rooms uygulaması tarafından otomatik olarak devre dışı bırakılmakta ve kararsız bağlantı hatalarına (Peripheral Disconnect) yol açmaktadır.
+
+## 2. Adım Adım Microsoft Teams Rooms Sistem Kurulumu Prosedürü
+Fiziksel bir toplantı odasında MTR donanımlarının montajı tamamlandıktan sonra, akıllı sistem arayüzünü aktif hale getirmek için aşağıdaki adımları sırasıyla takip ediniz:
+1. Oda bilgisayarına (MTR Compute Unit) kurumsal Windows IoT Enterprise işletim sistemini kurun ve en güncel Microsoft Teams Rooms uygulamasını yükleyin.
+2. İlk kurulum ekranında (Out-of-Box Experience), bu oda için BT departmanı tarafından özel olarak oluşturulmuş kurumsal oda hesabını (`oda.adi@kurum.com`) ve şifresini girin.
+3. Oda hesabına atanmış olan kaynak lisansının (Microsoft Teams Rooms Pro veya Basic) aktif olduğunu doğrulayarak oturumu açın.
+4. **Takvim Entegrasyonu (Calendar Integration):** Odanın Exchange Online posta kutusu (Resource Mailbox) ayarlarını tamamlayarak, kullanıcıların Outlook veya Teams üzerinden odayı rezerve ettiğinde toplantı davetlerinin anlık olarak oda ekranına düşmesini sağlayın.
+5. Dokunmatik konsol üzerinden çevre birimlerini (Kamera, mikrofon, hoparlör) test ederek ses desibel seviyelerini ve video çözünürlük ayarlarını doğrulayın.
+
+## 3. Yaygın Kurulum Hata Kodları, Donanım İstisnaları ve Çözümleri
+Microsoft Teams Rooms sistemlerinin devreye alınması ve günlük kullanımı esnasında karşılaşılabilecek en yaygın teknik hatalar ve BT çözüm yolları aşağıda listelenmiştir:
+
+* **Hata: Access Denied / Kaynak Lisansı Hatası:** Oda hesabı başarıyla girilse bile uygulamanın "Lisans Geçersiz" uyarısı vermesidir. Microsoft Teams Rooms cihazları standart kullanıcı lisanslarıyla (E3/E5) çalışmaz. Çözüm için BT yöneticisinin Microsoft 365 Admin Center paneline girerek hesaba özel "Teams Rooms Pro" lisansı tanımlaması gerekir.
+* **Hata: Takvim Senkronizasyonu Başarısız (Exchange Connection Error):** Odanın takvim panelinde toplantıların görünmemesi hatasıdır. Çözüm için Exchange Online üzerinde `Set-CalendarProcessing` PowerShell komut kuralını çalıştırarak odanın harici toplantı davetlerini otomatik kabul edecek şekilde (`-AutomateProcessing AutoAccept`) yapılandırıldığını doğrulayın.
+* **Hata: Donanım Bağlantısı Kesildi (Peripheral Disconnect):** Dokunmatik panel veya kameranın sistemden düşmesidir. Çözüm için USB güç tasarrufu modunu Windows ayarlarından kapatın, kablo mesafelerini kontrol edin ve üretici firmanın en güncel firmware (aygıt yazılımı) güncellemelerini cihaza yükleyin.
+
+## 4. Ağ Altyapısı, Güvenlik Gereksinimleri ve Cihaz İzleme
+MTR cihazlarının kurumsal ağ üzerinde güvenli çalışabilmesi için ağ katmanında bazı kısıtlamalar ve izinler tanımlanmalıdır. Cihazların dış dünyaya kesintisiz akış (streaming) yapabilmesi için güvenlik duvarı (Firewall) üzerinde TCP/UDP 443 ve 80 portlarının yanı sıra gerçek zamanlı medya trafiği için UDP 3478-3481 port aralıkları açık olmalıdır. Güvenlik politikaları gereğince oda hesaplarında Çok Faktörlü Kimlik Doğrulama (MFA) yapılandırılmalı, ancak cihazların otomatik açılabilmesi için **Conditional Access** (Koşullu Erişim) kurallarında MTR cihazları için istisnalar tanımlanmalıdır. BT ekipleri tüm odaların donanım sağlığını, anlık çevrimiçi/çevrimdışı durumlarını ve çağrı kalitesi metriklerini **Teams Admin Center** paneli üzerinden 7/24 uzaktan izleyebilir, gerektiğinde cihazlara uzaktan müdahale ederek güvenlik yamalarını (Intune üzerinden) merkezi olarak basabilir.

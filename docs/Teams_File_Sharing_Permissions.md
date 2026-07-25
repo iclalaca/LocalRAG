@@ -1,0 +1,22 @@
+# Microsoft Teams ve SharePoint Kurumsal Dosya Paylaşım İzinleri Kılavuzu
+
+## 1. Giriş ve Hibrit Depolama Mimarisi Politikaları
+Microsoft Teams, modern iş dünyasında anlık mesajlaşma ve görüntülü toplantıların yanı sıra, ekipler arası dosya paylaşımı ve eş zamanlı doküman düzenleme süreçleri için de merkezi bir istasyon görevi üstlenmektedir. Teknik altyapı mimarisi gereğince, Microsoft Teams kendi içinde bağımsız bir dosya depolama alanı barındırmaz; dosya paylaşım izinleri tamamen Microsoft 365 ekosistemindeki diğer iki servis üzerinden yürütülür: Teams kanallarında (Channels) paylaşılan tüm ortak dosyalar otomatik olarak o ekibe bağlı **SharePoint Online** kütüphanesinde saklanırken, birebir veya grup sohbetlerinde (Chats) paylaşılan dosyalar ise dosyayı gönderen kullanıcının kişisel **OneDrive İşletme** (OneDrive for Business) havuzunda depolanır. Bu nedenle, Teams üzerindeki bir dosya erişim yetkisi aslında doğrudan SharePoint veya OneDrive izin matrisini tetiklemektedir.
+
+## 2. Adım Adım Dosya İzin Yönetimi ve Paylaşım Kapsamı Prosedürü
+Kullanıcıların bir sohbet veya kanal içerisinde doküman paylaşırken veri sızıntılarını önlemek amacıyla aşağıdaki adımları sırasıyla izlemesi ve erişim kapsamını doğru belirlemesi gerekmektedir:
+1. Paylaşmak istediğiniz dosyanın yanındaki üç noktaya veya arayüzdeki "Paylaş" (Share) butonuna tıklayarak "Bağlantı Ayarları" (Link Settings) penceresini açın.
+2. Karşınıza gelen menüden kurumsal güvenlik politikanıza uygun olan erişim düzeyini seçin. Bu düzeyler: "Herkes (Anonim erişim)", "Yalnızca Şirket İçi Çalışanlar", "Mevcut Erişime Sahip Kişiler" veya "Belirli Seçilmiş Kişiler" şeklindedir.
+3. Erişim düzeyinin hemen altında yer alan yetkilendirme alanından "Düzenleyebilir" (Can Edit) veya veri güvenliği kritik belgeler için "Yalnızca Görüntüleyebilir" (Can View) seçeneğini işaretleyin.
+4. Gerekirse, dokümanın indirilmesini tamamen engellemek amacıyla "İndirmeyi Engelle" (Block Download) anahtarını aktif hale getirin.
+5. Değişiklikleri uygulamak için "Kaydet" butonuna basın ve üretilen güvenli URL bağlantısını ilgili kullanıcıya veya gruba iletin.
+
+## 3. Yaygın İzin Hataları, Sistem İstisnaları ve Sorun Giderme Adımları
+Kullanıcılar Teams üzerinden dosyalara erişmeye çalışırken en sık karşılaşılan sistem hataları ve bunların BT çözüm stratejileri aşağıda detaylandırılmıştır:
+
+* **Hata: Access Denied / Something Went Wrong (Erişim Reddedildi):** Kullanıcının ilgili SharePoint sitesinde veya OneDrive klasöründe gerekli okuma/yazma izni olmadığını belirtir. Genellikle bir ekibe sonradan katılan üyelerin geçmişte paylaşılan dosyalara erişmeye çalışmasıyla tetiklenir. Çözüm için dosya sahibinin SharePoint üzerindeki gelişmiş izin yönetimi (Advanced Permissions) paneline giderek "Erişim Taleplerini Yönet" kısmından kullanıcıya manuel onay vermesi gerekir.
+* **Hata: Link Expired / This link is no longer active (Bağlantı Süresi Doldu):** Güvenlik politikaları gereği harici kullanıcılarla paylaşılan anonim bağlantılara otomatik olarak bir son kullanma tarihi (Expiration Date) atanır. Bu süre dolduğunda bağlantı pasife düşer. Çözüm için kullanıcının sıfırdan yeni bir paylaşım linki üretmesi zorunludur.
+* **Hata: Sharing Disabled by Policy (Paylaşım Politikalarla Engellendi):** Şirket dışından bir konuk (Guest) veya harici (External) kullanıcıya dosya gönderilmeye çalışıldığında Exchange ve Teams koruma filtreleri devreye girerek işlemi engeller. Çözüm için BT yöneticisinin **Teams Admin Center** ve Azure portalı üzerinden o departman için harici paylaşım izinlerini (External Sharing Policies) esnetmesi veya onaylı etki alanları (Whitelisted Domains) listesine ilgili dış kurumu eklemesi gerekir.
+
+## 4. Gelişmiş DLP Politikaları ve Yönetici Denetimi
+Kurumsal veri kaybını önlemek amacıyla, tüm dosya paylaşım aktiviteleri arka planda **DLP (Data Loss Prevention)** mekanizmaları tarafından anlık olarak taranır. Eğer paylaşılan bir Excel veya PDF dökümanı içerisinde gizli müşteri dataları, finansal bilançolar veya hassas Ar-Ge şifreleri tespit edilirse, DLP kuralı paylaşım linkini anında bloke eder ve kullanıcı ekranına "Bu dosya organizasyon dışına paylaşılamaz" uyarısı düşer. BT güvenlik ekipleri, sistem sağlığını ve olası iç tehditleri izlemek amacıyla **Teams Admin Center** ve **SharePoint Güvenlik Merkezi** üzerinden denetim günlüklerini (Audit Logs) düzenli olarak incelemeli, tüm dosya transfer süreçlerinde Çok Faktörlü Kimlik Doğrulamayı (MFA) zorunlu kılmalıdır.

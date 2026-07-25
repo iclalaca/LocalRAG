@@ -1,0 +1,22 @@
+# Kurumsal OneDrive İşletme Senkronizasyon Hataları ve Gelişmiş Çözüm Kılavuzu
+
+## 1. Giriş ve Kurumsal Depolama Politikaları
+Microsoft 365 ekosisteminin temel direklerinden biri olan OneDrive iş dünyasında kesintisiz dosya paylaşımı, eş zamanlı ortak çalışma ve bulut yedekleme süreçleri için kritik bir rol üstlenmektedir. Ancak yerel cihazlar ile bulut sunucuları arasında meydana gelen senkronizasyon kesintileri, personelin güncel dosyalara erişmesini engelleyerek iş gücü kaybına yol açabilir. Şirket BT politikaları gereğince, her personelin 1 TB kurumsal depolama alanı bulunmaktadır. Veri güvenliği ve ağ bant genişliğinin (bandwidth) verimli kullanılması amacıyla, boyutu 10 GB'tan büyük dosyaların, şifreli arşivlerin (.zip, .rar) ve çalıştırılabilir kod bloklarının (.exe, .bat, .msi) OneDrive üzerinden senkronize edilmesi merkezi grup politikaları (GPO) ile sınırlandırılmıştır.
+
+## 2. Yaygın Hata Kodları, Ağ İstisnaları ve BT Çözüm Yolları
+OneDrive istemcisinin yerel işletim sistemi üzerinde fırlattığı en kritik senkronizasyon hata kodları ve bunların yapısal çözüm adımları aşağıda detaylandırılmıştır:
+
+* **Hata Kodu: 0x8004de40 (Bulut Bağlantı Hatası):** Bu hata, OneDrive yerel istemcisinin Microsoft bulut sunucularına bağlanamadığını ve ağ sinyalinin kesildiğini belirtir. Çözüm için öncelikle internet bağlantınızı kontrol edin. Eğer kurumsal VPN veya şirket içi proxy sunucusu kullanılıyorsa, ağ güvenlik duvarı (Firewall) kurallarında `*.sharepoint.com` ve `*.storage.live.com` adreslerine izin verildiğinden emin olun. Tarayıcı üzerinden TLS 1.2 protokolünün aktif olduğunu doğrulayın.
+* **Hata Kodu: 0x8004de85 (Kimlik Doğrulama ve Hesap Uyuşmazlığı):** Kullanıcının kurumsal hesap bilgileri veya şifresi değiştiğinde, yerel önbellekteki eski kimlik doğrulama tokenları nedeniyle bu hata tetiklenir. Çözüm için sağ alttaki OneDrive simgesine sağ tıklayıp "Ayarlar > Hesap" sekmesinden "Bu Bilgisayarın Bağlantısını Kes" seçeneğini uygulayın. Ardından güncel şifreniz ve Microsoft Authenticator MFA (Çok Faktörlü Kimlik Doğrulama) onayınızla sisteme yeniden giriş yapın.
+* **Hata Kodu: Dosya Adı, Karakter veya Yol Uzunluğu Sınırı (Path Too Long):** Windows dosya sistemi mimarisi gereği tam dosya yolu uzunluğu (klasör isimleri dahil) 400 karakteri, dosya adının kendisi ise 255 karakteri aşamaz. Ayrıca dosya isimlerinde ` <, >, :, ", |, ?, *, /, \ ` gibi özel karakterler bulunmamalıdır. Çözüm için dosyayı daha üst bir ana klasöre taşıyın veya ismini kısaltın.
+
+## 3. Adım Adım Self-Servis Gelişmiş Sıfırlama Prosedürü
+Standart kapatıp açma işlemlerinin sorunu çözmediği durumlarda, yerel OneDrive veri tabanını ve önbelleğini tamamen sıfırlamak için aşağıdaki adımları sırasıyla uygulayınız:
+1. Klavyenizden `Windows + R` tuşlarına basarak "Çalıştır" penceresini açın (macOS kullanıyorsanız Terminal ekranını açın).
+2. Açılan kutucuğa şu komutu aynen yapıştırın ve Enter tuşuna basın: `%localappdata%\Microsoft\OneDrive\onedrive.exe /reset`
+3. Bu komut uygulandığında görev çubuğundaki OneDrive simgesi tamamen kaybolacaktır. Bu, yerel veri tabanının temizlendiğini gösterir.
+4. Yaklaşık 2-3 dakika bekledikten sonra tekrar `Windows + R` penceresini açın ve şu komutla istemciyi yeniden başlatın: `%localappdata%\Microsoft\OneDrive\onedrive.exe`
+5. İstemci açıldığında "On-Demand Files" (İsteğe Bağlı Dosyalar) özelliğini aktif hale getirerek, dosyaların bilgisayarınızda yer kaplamadan sadece bulut üzerinde referans olarak tutulmasını sağlayın; bu işlem senkronizasyon hızını optimize edecektir.
+
+## 4. BT Yönetici Kontrolleri ve DLP Entegrasyonu
+BT departmanı yöneticileri, kullanıcıların senkronizasyon durumlarını **Microsoft Entra ID (Azure AD)** ve Exchange Admin Center panelleri üzerinden uzaktan izleyebilir. Şirket verilerinin sızmasını önlemek amacıyla sisteme **DLP (Veri Kaybı Önleme)** kuralları entegre edilmiştir. "Çok Gizli" etiketine sahip kurumsal finansal dökümanlar veya Ar-Ge kodları, kullanıcı tarafından OneDrive klasörüne atılsa dahi şifrelenmiş altyapı ve DLP kuralları devreye girerek bu dosyaların şirket dışı kişisel cihazlara senkronize edilmesini otomatik olarak engeller. Kritik senkronizasyon log detayları, Windows üzerindeki **Event Viewer (Olay Görüntüleyici)** paneli altında "Applications and Services Logs > Microsoft > Windows > OneDrive" hiyerarşisi takip edilerek incelenebilir.
