@@ -68,10 +68,12 @@ This project allows users to query internal documentation (e.g., Microsoft 365, 
 ### Install dependencies:
    ```bash
 npm install
+```
 
 ### Start the application:
    ```
 node server.js
+```
 
 ### Open your browser and navigate to:
 ```text
