@@ -1,6 +1,8 @@
 # 🤖 Local RAG Assistant
 
-An end-to-end, fully offline **Retrieval-Augmented Generation (RAG)** assistant built with **Node.js**, **Express**, and **Foundry Local**. 
+> **Microsoft AI Innovators Summer Internship Project**
+
+An end-to-end, fully offline **Retrieval-Augmented Generation (RAG)** assistant built with **Node.js**, **Express**, and **Foundry Local** as part of the **Microsoft AI Innovators Summer Internship** program.
 
 This project allows users to query internal documentation (e.g., Microsoft 365, Teams, OneDrive, Windows 11 guides) with **100% data privacy** and zero internet dependency.
 
