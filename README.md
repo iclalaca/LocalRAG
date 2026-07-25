@@ -30,6 +30,8 @@ This project allows users to query internal documentation (e.g., Microsoft 365, 
      │
      ▼
 [Grounded Answer + Source Citation]
+```
+
 Ingestion: Local .md and .txt documents are chunked and embedded into rag.db.
 Retrieval: When a user asks a question, the system retrieves the most relevant document chunks based on vector similarity.
 Generation: The retrieved chunks are fed as context to the qwen2.5-7b model to generate a precise answer without hallucination.
