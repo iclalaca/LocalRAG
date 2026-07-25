@@ -32,34 +32,49 @@ This project allows users to query internal documentation (e.g., Microsoft 365, 
 [Grounded Answer + Source Citation]
 ```
 
-Ingestion: Local .md and .txt documents are chunked and embedded into rag.db.
-Retrieval: When a user asks a question, the system retrieves the most relevant document chunks based on vector similarity.
-Generation: The retrieved chunks are fed as context to the qwen2.5-7b model to generate a precise answer without hallucination.
-🛠️ Tech Stack
-Backend: Node.js, Express.js
-Frontend: HTML5, CSS3, JavaScript (Fetch API)
-Local AI Runtime: Foundry Local / Ollama
-LLM Engine: qwen2.5-7b
-Embedding Model: qwen3-embedding
-Vector Store: SQLite (rag.db)
-Utilities: cors, multer
-🚀 Getting Started
-Prerequisites
-Install Node.js (v18 or higher).
-Ensure Foundry Local (or your local LLM runner) is active with qwen2.5-7b and qwen3-embedding models pulled.
-Installation
-Clone the repository:
-Bash
-git clone [https://github.com/iclalaca/LocalRAG.git](https://github.com/iclalaca/LocalRAG.git)
-cd LocalRAG
-Install dependencies:
-Bash
+1. **Ingestion:** Local `.md` and `.txt` documents are chunked and embedded into `rag.db`.
+2. **Retrieval:** When a user asks a question, the system retrieves the most relevant document chunks based on vector similarity.
+3. **Generation:** The retrieved chunks are fed as context to the `qwen2.5-7b` model to generate a precise answer without hallucination.
+
+---
+
+## 🛠️ Tech Stack
+
+* **Backend:** Node.js, Express.js
+* **Frontend:** HTML5, CSS3, JavaScript (Fetch API)
+* **Local AI Runtime:** Foundry Local / Ollama
+* **LLM Engine:** `qwen2.5-7b`
+* **Embedding Model:** `qwen3-embedding`
+* **Vector Store:** SQLite (`rag.db`)
+* **Utilities:** `cors`, `multer`
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+1. Install [Node.js](https://nodejs.org/) (v18 or higher).
+2. Ensure **Foundry Local** (or your local LLM runner) is active with `qwen2.5-7b` and `qwen3-embedding` models pulled.
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone [https://github.com/iclalaca/LocalRAG.git](https://github.com/iclalaca/LocalRAG.git)
+   cd LocalRAG
+   ```
+
+### Install dependencies:
+   ```bash
 npm install
-Start the application:
-Bash
+
+### Start the application:
+   ```
 node server.js
-Open your browser and navigate to:
-Plaintext
+
+### Open your browser and navigate to:
+```text
 http://localhost:3000
 📁 Project Structure
 Plaintext
@@ -74,5 +89,8 @@ LocalRAG/
 ├── config.js             # Project configurations
 ├── rag.db                # SQLite vector storage
 └── package.json          # Node.js dependencies
-📜 License
+```
+---
+
+## 📜 License
 Distributed under the MIT License. Feel free to fork and adapt for personal or enterprise local RAG experiments!
