@@ -61,7 +61,7 @@ This project allows users to query internal documentation (e.g., Microsoft 365, 
 
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/iclalaca/LocalRAG.git](https://github.com/iclalaca/LocalRAG.git)
+   git clone https://github.com/iclalaca/LocalRAG.git
    cd LocalRAG
    
 ### Install dependencies:
